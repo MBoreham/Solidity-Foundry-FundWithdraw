@@ -1,14 +1,12 @@
 // SPDX-License-Identifier: MIT
 
-
 pragma solidity ^0.8.18;
 
 import {Test, console} from "forge-std/Test.sol";
 import {FundMe} from "../../src/FundMe.sol";
 import {DeployFundMe} from "../../script/DeployFundMe.s.sol";
 
-contract FundMeTest is Test{
-
+contract FundMeTest is Test {
     FundMe fundMe;
 
     address USER = makeAddr("user");
@@ -32,14 +30,13 @@ contract FundMeTest is Test{
     }
 
     function testPriceFeedVersionIsAccurate() public view {
-        if (block.chainid == 11155111){
+        if (block.chainid == 11155111) {
             uint256 version = fundMe.getVersion();
             assertEq(version, 4);
-        } else if (block.chainid == 1){
+        } else if (block.chainid == 1) {
             uint256 version = fundMe.getVersion();
-        assertEq(version, 6);
+            assertEq(version, 6);
         }
-        
     }
 
     function testFundFailsWithoutEnoughEth() public {
@@ -94,7 +91,7 @@ contract FundMeTest is Test{
     function testWithdrawFromMultipleFunders() public funded {
         uint160 numberOfFunders = 10;
         uint160 startingFunderIndex = 1;
-        for(uint160 i = startingFunderIndex; i < numberOfFunders; i++){
+        for (uint160 i = startingFunderIndex; i < numberOfFunders; i++) {
             hoax(address(i), SEND_VALUE);
             fundMe.fund{value: SEND_VALUE}();
         }
@@ -113,7 +110,7 @@ contract FundMeTest is Test{
     function testWithdrawFromMultipleFundersCheaper() public funded {
         uint160 numberOfFunders = 10;
         uint160 startingFunderIndex = 1;
-        for(uint160 i = startingFunderIndex; i < numberOfFunders; i++){
+        for (uint160 i = startingFunderIndex; i < numberOfFunders; i++) {
             hoax(address(i), SEND_VALUE);
             fundMe.fund{value: SEND_VALUE}();
         }
@@ -128,5 +125,4 @@ contract FundMeTest is Test{
         assert(address(fundMe).balance == 0);
         assert(startingFundMeBalance + startingOwnerBalance == fundMe.getOwner().balance);
     }
-
 }

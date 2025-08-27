@@ -11,7 +11,6 @@ contract FundFundMe is Script {
     address USER = makeAddr("user");
 
     function fundFundMe(address mostRecentlyDeployed) public {
-        
         console.log(msg.sender);
         vm.deal(USER, SEND_VALUE);
         vm.prank(USER);
@@ -29,7 +28,6 @@ contract FundFundMe is Script {
 }
 
 contract WithdrawFundMe is Script {
-    
     function withdrawFundMe(address mostRecentlyDeployed) public {
         vm.startBroadcast();
         FundMe(payable(mostRecentlyDeployed)).withdraw();

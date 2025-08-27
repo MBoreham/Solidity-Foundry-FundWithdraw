@@ -4,12 +4,10 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.18;
 
-
 import {AggregatorV3Interface} from "@chainlink/contracts/src/v0.8/interfaces/AggregatorV3Interface.sol";
 import {PriceConverter} from "./PriceConverter.sol";
 
 error FundMe__NotOwner();
-
 
 contract FundMe {
     using PriceConverter for uint256;
@@ -26,24 +24,20 @@ contract FundMe {
         s_priceFeed = AggregatorV3Interface(priceFeed);
     }
 
-
     function fund() public payable {
         require(msg.value.getConversionRate(s_priceFeed) >= MINIMUM_USD, "You need to spend more ETH!");
         s_addressToAmountFunded[msg.sender] += msg.value;
         s_funders.push(msg.sender);
     }
 
-
     function getVersion() public view returns (uint256) {
         return s_priceFeed.version();
     }
-
 
     modifier onlyOwner() {
         if (msg.sender != i_owner) revert FundMe__NotOwner();
         _;
     }
-
 
     function withdraw() public onlyOwner {
         for (uint256 funderIndex = 0; funderIndex < s_funders.length; funderIndex++) {
@@ -56,11 +50,10 @@ contract FundMe {
         require(callSuccess, "Call failed");
     }
 
-
     // cheaperWitdraw reduces gas costs associated with storage calls
     function cheaperWithdraw() public onlyOwner {
         uint256 fundersLength = s_funders.length;
-        for(uint256 funderIndex = 0; funderIndex < fundersLength; funderIndex++){
+        for (uint256 funderIndex = 0; funderIndex < fundersLength; funderIndex++) {
             address funder = s_funders[funderIndex];
             s_addressToAmountFunded[funder] = 0;
         }
@@ -70,8 +63,6 @@ contract FundMe {
         require(callSuccess, "Call failed");
     }
 
-
-    
     fallback() external payable {
         fund();
     }
@@ -80,8 +71,7 @@ contract FundMe {
         fund();
     }
 
-
-    function getAddressToAmountFunded(address fundingAddress) external view returns(uint256){
+    function getAddressToAmountFunded(address fundingAddress) external view returns (uint256) {
         return s_addressToAmountFunded[fundingAddress];
     }
 
@@ -89,8 +79,7 @@ contract FundMe {
         return s_funders[index];
     }
 
-    function getOwner() external view returns(address) {
+    function getOwner() external view returns (address) {
         return i_owner;
     }
-
 }
