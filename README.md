@@ -17,7 +17,7 @@ This project implements a basic Ethereum smart contract using Solidity. The cont
 ## ✨ Features
 
 - **Fund Deposit:** Users can deposit ETH into the contract's fund.
-- **Fund Withdrawal:** Users can withdraw ETH from the contract's fund.  (Further access controls would be needed in a production environment).
+- **Fund Withdrawal:** Owner can withdraw ETH from the contract's fund.  (Further access controls would be needed in a production environment).
 
 ## 🛠️ Tech Stack
 
